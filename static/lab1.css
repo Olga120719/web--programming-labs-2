@@ -1,0 +1,71 @@
+body {
+    background-color: rgb(179, 212, 159);
+    color: rgb(23, 106, 37);
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0px;
+    text-align: center;
+}
+
+footer {
+    background-color: rgba(13, 159, 66, 0.5);
+    font-style: italic;
+    text-align: right;
+    position: fixed;
+    bottom: 0px;
+    width: 99%;
+    height: 50px;
+    padding: 10px;
+    transition: all 0.3s;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    cursor: pointer;
+    border-top: 2px dashed #333;
+
+}
+main {
+    margin: 10px 20px 45px;
+}
+header {
+    background-color: rgba(13, 159, 66, 0.5);
+    font-size: 14pt;
+    padding: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+    border-bottom: 2px dashed #333;
+}
+
+header:hover, footer:hover {
+    background-color: #FFB2A2;
+    color: #149845;
+    font-size: 24px;
+}
+
+header:active, footer:active {
+    background-color: #9DF6BE;
+    color: #50AF73;
+    font-size: 18px;
+}
+a {
+    color: #149845;
+    text-decoration: none;
+    transition: color 1s, text-shadow 1s;
+    text-shadow: 1px 1px 2px #149845;
+
+}
+
+a:visited {
+    color: #149845;
+    background-color: #149845;
+}
+a:hover {
+    color:#149845;
+    text-decoration: underline;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #149845;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+a:active {
+    color: #149845;
+    background-color: #149845;
+}
