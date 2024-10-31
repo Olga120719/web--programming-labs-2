@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, make_response, redirect, url_for
+from flask import Blueprint, render_template, request, make_response, redirect, url_for, session
 lab4 = Blueprint('lab4', __name__)
 
 
@@ -83,8 +83,8 @@ if __name__ == "__main__":
 
 
 
+lab4.secret_key = 'your_secret_key'  
 
-# Список пользователей
 users = [
     {"username": "alex", "password": "123", "name": "Алексей Иванов", "gender": "мужской"},
     {"username": "bob", "password": "456", "name": "Борис Петров", "gender": "мужской"},
@@ -120,29 +120,59 @@ def login():
 
 
 # Добавляем маршрут для страницы регистрации
-@lab4.route("/lab4/register", methods=["POST", "GET"])
+@lab4.route("/lab4/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
         name = request.form.get("name")
+        gender = request.form.get("gender")
         
-        # Проверка на пустые поля
-        if not username or not password or not name:
-            error = "Все поля должны быть заполнены!"
+        # Проверка уникальности логина
+        if any(user['username'] == username for user in users):
+            error = "Этот логин уже занят!"
             return render_template("register.html", error=error)
-
-        # Проверка, что логин уникален
-        for user in users:
-            if user["username"] == username:
-                error = "Пользователь с таким логином уже существует!"
-                return render_template("register.html", error=error)
         
-        # Добавляем нового пользователя
-        users.append({"username": username, "password": password, "name": name, "gender": "не указан"})
-        return redirect(url_for("login"))
-
+        # Добавление нового пользователя в массив
+        users.append({
+            'username': username,
+            'password': password,
+            'name': name,
+            'gender': gender
+        })
+        return redirect(url_for('login'))
     return render_template("register.html")
+
+@lab4.route("/lab4/users")
+def users_list():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    return render_template("users_list.html", users=users, current_user=session['username'])
+
+@lab4.route("/lab4/edit/<username>", methods=["GET", "POST"])
+def edit_user(username):
+    if 'username' not in session or session['username'] != username:
+        return redirect(url_for('login'))
+    user = next((u for u in users if u['username'] == username), None)
+    if request.method == "POST":
+        user['name'] = request.form.get("name")
+        user['password'] = request.form.get("password")
+        return redirect(url_for('users_list'))
+    return render_template("edit_user.html", user=user)
+
+@lab4.route("/lab4/delete/<username>", methods=["POST"])
+def delete_user(username):
+    if 'username' not in session or session['username'] != username:
+        return redirect(url_for('login'))
+    global users
+    users = [u for u in users if u['username'] != username]
+    session.pop('username', None)  # Удалить сессию пользователя после удаления аккаунта
+    return redirect(url_for('login'))
+
+@lab4.route("/lab4/logout")
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
 
 
 @lab4.route("/lab4/fridge/", methods=["POST", "GET"])
