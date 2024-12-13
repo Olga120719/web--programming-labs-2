@@ -26,6 +26,8 @@ def menu():
                 <li><a href="/lab2">Вторая лабораторная</a></li>
                 <li><a href="/lab3">Третья лабораторная</a></li>
                 <li><a href="/lab4">Четвертая лабораторная</a></li>
+                <li><a href="lab5/lab5">Пятая лабораторная</a></li>
+                <li><a href="lab6/lab6.html">Лабораторная работа 6</a></li>      
             </ol>
         </main>
 
@@ -66,10 +68,10 @@ def lab():
         <h1>Реализованные роуты</h1>
 
         <ul>
-            <li><a href="/lab1/oak">/lab1/oak - дуб</a></li>
-            <li><a href="/lab1/student">/lab1/student - студент</a></li>
-            <li><a href="/lab1/python">/lab1/python - python</a></li>
-            <li><a href="/lab1/cats">/lab1/cats - cats</a></li>
+            <li><a href="/lab1/oak">Дуб</a></li>
+            <li><a href="/lab1/student">Студент</a></li>
+            <li><a href="/lab1/python">Python</a></li>
+            <li><a href="/lab1/cats">Cats</a></li>
         </ul>
  
         <footer>

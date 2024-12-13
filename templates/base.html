@@ -3,26 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Цой Ольга. {% block lab %}{% endblock %}</title>
+    <title>Цой Ольга. {% block lab2 %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+
+    </style>
+    {% block script %}{% endblock %}
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. {{ self.lab() }}
+        WEB-программирование. Часть 2. {% block lab2_header %}{% endblock %}
+        <a href="/menu">Меню</a>
     </header>
-
+    
     <main>
-        <ol><a href="http://127.0.0.1:5000/menu">Меню</a></ol>
+       
         {% block main %}{% endblock %}
-        <nav>
-            <a href="{{ url_for('lab4.login') }}">Вход</a> |
-            <a href="{{ url_for('lab4.register') }}">Регистрация</a> |
-            <a href="{{ url_for('lab4.users_list') }}">Список пользователей</a> |
-            {% if 'username' in session %}
-                <a href="{{ url_for('logout') }}">Выход</a>
-            {% endif %}
-        </nav>
-        
+
     </main>
 
     <footer>

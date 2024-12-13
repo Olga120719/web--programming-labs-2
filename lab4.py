@@ -4,53 +4,53 @@ lab4 = Blueprint('lab4', __name__)
 
 @lab4.route ("/lab4/")
 def lab():
-    return render_template("lab4.html")
+    return render_template("lab4/lab4.html")
 
-@lab4.route ("/lab4/div-form")
+@lab4.route ("/lab4/div-form/")
 def div_form():
-    return render_template("div-form.html")
+    return render_template("lab4/div-form.html")
 
-@lab4.route ("/lab4/div", methods = ['POST'])
+@lab4.route ("/lab4/div/", methods = ['POST'])
 def div():
     x1 = request.form.get('x1')
     x2 = request.form.get('x2')
     if x1 == '' or x2 == '':
-        return render_template('div.html', error='Оба поля должны быть заполнены')
+        return render_template('lab4/div.html', error='Оба поля должны быть заполнены')
     x1 = int(x1)
     x2 = int(x2)
     result = x1 / x2
-    return render_template('div.html', x1=x1, x2=x2, result=result)
+    return render_template('lab4/div.html', x1=x1, x2=x2, result=result)
 
-@lab4.route("/lab4/add", methods=['POST'])
+@lab4.route("/lab4/add/", methods=['POST'])
 def add():
     x1 = request.form.get('x1')
     x2 = request.form.get('x2')
     x1 = int(x1) if x1 else 0
     x2 = int(x2) if x2 else 0
     result = x1 + x2
-    return render_template('div.html', operation="суммирования", x1=x1, x2=x2, result=result)
+    return render_template('lab4/div.html', operation="суммирования", x1=x1, x2=x2, result=result)
 
-@lab4.route("/lab4/multiply", methods=['POST'])
+@lab4.route("/lab4/multiply/", methods=['POST'])
 def multiply():
     x1 = request.form.get('x1')
     x2 = request.form.get('x2')
     x1 = int(x1) if x1 else 1
     x2 = int(x2) if x2 else 1
     result = x1 * x2
-    return render_template('div.html', operation="умножения", x1=x1, x2=x2, result=result)
+    return render_template('lab4/div.html', operation="умножения", x1=x1, x2=x2, result=result)
 
-@lab4.route("/lab4/subtract", methods=['POST'])
+@lab4.route("/lab4/subtract/", methods=['POST'])
 def subtract():
     x1 = request.form.get('x1')
     x2 = request.form.get('x2')
     if x1 == '' or x2 == '':
-        return render_template('div.html', error="Оба поля должны быть заполнены для вычитания")
+        return render_template('lab4/div.html', error="Оба поля должны быть заполнены для вычитания")
     x1 = int(x1)
     x2 = int(x2)
     result = x1 - x2
-    return render_template('div.html', operation="вычитания", x1=x1, x2=x2, result=result)
+    return render_template('lab4/div.html', operation="вычитания", x1=x1, x2=x2, result=result)
 
-@lab4.route("/lab4/power", methods=['POST'])
+@lab4.route("/lab4/power/", methods=['POST'])
 def power():
     x1 = request.form.get('x1')
     x2 = request.form.get('x2')
@@ -61,11 +61,11 @@ def power():
     if x1 == 0 and x2 == 0:
         return render_template('div.html', error="Оба значения не могут быть равны нулю для возведения в степень")
     result = x1 ** x2
-    return render_template('div.html', operation="возведения в степень", x1=x1, x2=x2, result=result)
+    return render_template('lab4/div.html', operation="возведения в степень", x1=x1, x2=x2, result=result)
 
 tree_count = 0  
 
-@lab4.route("/lab4/tree", methods=["GET", "POST"])
+@lab4.route("/lab4/tree/", methods=["GET", "POST"])
 def tree():
     global tree_count
     if request.method == "POST":
@@ -75,7 +75,7 @@ def tree():
         elif operation == "cut" and tree_count > 0:
             tree_count -= 1
         return redirect(url_for("lab4.tree")) 
-    return render_template("tree.html", tree_count=tree_count)
+    return render_template("lab4/tree.html", tree_count=tree_count)
 
 if __name__ == "__main__":
     lab4.run(debug=True)
@@ -94,7 +94,7 @@ users = [
 @lab4.route("/lab4/login/", methods=["POST", "GET"])
 def login():
     if request.method == "GET":
-        return render_template("login.html")
+        return render_template("lab4/login.html")
 
     username = request.form.get("username")
     password = request.form.get("password")
@@ -116,11 +116,11 @@ def login():
         error = "Неверный логин и/или пароль!"
 
     # Возвращаем пользователя на страницу логина с сохранённым логином и сообщением об ошибке
-    return render_template("login.html", error=error, username=username)
+    return render_template("lab4/login.html", error=error, username=username)
 
 
 # Добавляем маршрут для страницы регистрации
-@lab4.route("/lab4/register", methods=["GET", "POST"])
+@lab4.route("/lab4/register/", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         username = request.form.get("username")
@@ -131,7 +131,7 @@ def register():
         # Проверка уникальности логина
         if any(user['username'] == username for user in users):
             error = "Этот логин уже занят!"
-            return render_template("register.html", error=error)
+            return render_template("lab4/register.html", error=error)
         
         # Добавление нового пользователя в массив
         users.append({
@@ -143,13 +143,13 @@ def register():
         return redirect(url_for('login'))
     return render_template("register.html")
 
-@lab4.route("/lab4/users")
+@lab4.route("/lab4/users/")
 def users_list():
     if 'username' not in session:
         return redirect(url_for('login'))
-    return render_template("users_list.html", users=users, current_user=session['username'])
+    return render_template("lab4/users_list.html", users=users, current_user=session['username'])
 
-@lab4.route("/lab4/edit/<username>", methods=["GET", "POST"])
+@lab4.route("/lab4/edit/<username>/", methods=["GET", "POST"])
 def edit_user(username):
     if 'username' not in session or session['username'] != username:
         return redirect(url_for('login'))
@@ -158,9 +158,9 @@ def edit_user(username):
         user['name'] = request.form.get("name")
         user['password'] = request.form.get("password")
         return redirect(url_for('users_list'))
-    return render_template("edit_user.html", user=user)
+    return render_template("lab4/edit_user.html", user=user)
 
-@lab4.route("/lab4/delete/<username>", methods=["POST"])
+@lab4.route("/lab4/delete/<username>/", methods=["POST"])
 def delete_user(username):
     if 'username' not in session or session['username'] != username:
         return redirect(url_for('login'))
@@ -169,7 +169,7 @@ def delete_user(username):
     session.pop('username', None)  # Удалить сессию пользователя после удаления аккаунта
     return redirect(url_for('login'))
 
-@lab4.route("/lab4/logout")
+@lab4.route("/lab4/logout/")
 def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
@@ -178,7 +178,7 @@ def logout():
 @lab4.route("/lab4/fridge/", methods=["POST", "GET"])
 def fridge():
     if request.method == "GET":
-        return render_template("fridge.html")
+        return render_template("lab4/fridge.html")
 
     temp = request.form.get("temp")
     if not temp:
@@ -204,21 +204,21 @@ def fridge():
 def offer():
     type_offer = request.form.get("type_offer")
     if request.method == "GET":
-        return render_template("offer.html")
+        return render_template("lab4/offer.html")
     
     weight = request.form.get("weight")
     if not weight:
         error = "Не введён вес!"
-        return render_template("offer.html", error = error)
+        return render_template("lab4/offer.html", error = error)
     elif int(weight) <= 0:
         error = "Неверное значение веса!"
-        return render_template("offer.html", error = error)
+        return render_template("lab4/offer.html", error = error)
     elif int(weight) > 500:
         error = "Такого объёма сейчас нет в наличии!"
-        return render_template("offer.html", error = error)
+        return render_template("lab4/offer.html", error = error)
     elif str(type_offer) == "zerno":
         error = "Выберите зерно!"
-        return render_template("offer.html", error = error)
+        return render_template("lab4/offer.html", error = error)
     elif int(weight) <= 500 and int(weight) >= 50:
         weight = int(weight)
         prices = {
@@ -240,7 +240,7 @@ def offer():
         else:
             type_offer = "овес"
 
-        return render_template("offer_conf%.html", total_price = total_price, type_offer = type_offer, weight = weight)
+        return render_template("lab4/offer_conf%.html", total_price = total_price, type_offer = type_offer, weight = weight)
     else:
         weight = int(weight)
         prices = {
@@ -261,5 +261,5 @@ def offer():
         else:
             type_offer = "овес"
 
-        return render_template("offer_conf.html", total_price = total_price, weight = weight, type_offer = type_offer)
+        return render_template("lab4/offer_conf.html", total_price = total_price, weight = weight, type_offer = type_offer)
 

@@ -6,13 +6,13 @@ lab3 = Blueprint('lab3', __name__)
 def lab():
     name = request.cookies.get('name')
     name_color = request.cookies.get('name_color', 'red')
-    return render_template("lab3.html", name=name, name_color=name_color)
+    return render_template("lab3/lab3.html", name=name, name_color=name_color)
 
-@lab3.route('/lab3/cookie')
+@lab3.route('/lab3/cookie/')
 def cookie():
     return 'установка cookie', 200, {'Set-Cookie': 'name=Alex'}
 
-@lab3.route ('/lab3/del_cookie')
+@lab3.route ('/lab3/del_cookie/')
 def del_cookie ():
     resp = make_response(redirect('/lab3/'))
     resp.delete_cookie('name')
@@ -32,11 +32,11 @@ def form1():
         errors["age"] = "Заполните поле!"
     
     sex = request.args.get("sex")
-    return render_template("form1.html", user = user, age = age, sex = sex, errors = errors)
+    return render_template("lab3/form1.html", user = user, age = age, sex = sex, errors = errors)
 
 @lab3.route("/lab3/order/")
 def order():
-    return render_template("order.html")
+    return render_template("lab3/order.html")
 
 
 @lab3.route("/lab3/pay/")
@@ -55,21 +55,21 @@ def pay():
     if request.args.get("sugar") == "on":
         price += 10
 
-    return render_template("pay.html", price = price)
+    return render_template("lab3/pay.html", price = price)
 
 
 @lab3.route("/lab3/success/")
 def success():
-    return render_template("success.html")
+    return render_template("lab3/success.html")
 
 
-@lab3.route("/lab3/train")
+@lab3.route("/lab3/train/")
 def train():
     errors = {}
-    return render_template("train.html", errors = errors)
+    return render_template("lab3/train.html", errors = errors)
 
 
-@lab3.route("/lab3/trainacc")
+@lab3.route("/lab3/trainacc/")
 def trainacc():
     a = 0
     errors = {}
@@ -120,15 +120,15 @@ def trainacc():
     calen = request.args.get("calen")
 
     if len(errors) > 0:
-        return render_template("train.html", errors = errors)
+        return render_template("lab3/train.html", errors = errors)
 
     return render_template("trainacc.html", user_fio = user_fio, user_in = user_in, user_out = user_out, age_pass = age_pass, type_b = type_b,
                            type_p = type_p, type_t = type_t, calen = calen)
 
 
-@lab3.route("/lab3/home")
+@lab3.route("/lab3/home/")
 def home():
-    return render_template('home.html')
+    return render_template('lab3/home.html')
     products = [
     {'name': 'Смартфон A', 'price': 10000, 'brand': 'Brand A', 'color': 'черный'},
     {'name': 'Смартфон B', 'price': 15000, 'brand': 'Brand B', 'color': 'белый'},
@@ -164,7 +164,7 @@ def search():
         int(min_price) <= product['price'] <= int(max_price)
     ]
 
-    return render_template('mun.html', products=filtered_products)
+    return render_template('lab3/mun.html', products=filtered_products)
 
 if __name__ == '__main__':
     lab3.run(debug=True)
