@@ -1,30 +1,29 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 
 {% block lab2 %} Лабораторные работы {% endblock %}
 
-{%block main%}
+{% block main %}
 <html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>НГТУ ФБ Лабораторные работы</title>
-        <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     </head>
     <body>
-
         <main>
             <ol>
-                <li><a href = "http://127.0.0.1:5000/lab1/lab2.html/">Первая лабораторная></a></li>
-                <li><a href = "http://127.0.0.1:5000/lab2/">Вторая лабораторная></a></li>
-                <li><a href = "http://127.0.0.1:5000/lab3/">Третья лабораторная></a></li> 
-                <li><a href = "http://127.0.0.1:5000/lab4/">Четвертая лабораторная></a></li> 
-                <li><a href = "http://127.0.0.1:5000/lab5/">Пятая лабораторная></a></li> 
-                <li><a href="lab6/lab6.py">Лабораторная работа 6</a></li>        
-            </ol> 
+                <li><a href="{{ url_for('lab6.lab_6') }}">Шестая лабораторная</a></li>
+                <li><a href="http://127.0.0.1:5000/lab1/">Первая лабораторная</a></li>
+                <li><a href="http://127.0.0.1:5000/lab2/">Вторая лабораторная</a></li>
+                <li><a href="http://127.0.0.1:5000/lab3/">Третья лабораторная</a></li>
+                <li><a href="http://127.0.0.1:5000/lab4/">Четвертая лабораторная</a></li>
+                <li><a href="http://127.0.0.1:5000/lab5/">Пятая лабораторная</a></li>
+            </ol>
         </main>
-
         <footer>
             &copy; Цой Ольга, ФБИ-23, 3 курс, 2024
         </footer>
     </body>
-{%endblock%}
+</html>
+{% endblock %}

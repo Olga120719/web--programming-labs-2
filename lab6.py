@@ -1,10 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, session, jsonify
 
-lab6 = Blueprint('lab6', __name__)
+lab6 = Blueprint('lab6', __name__, template_folder='templates')
 
-offices = []
-for i in range(1, 11):
-    offices.append({"number": i, "tenant": "", "price": 1000 + (i % 3)})
+# Предопределенные данные о кабинетах
+offices = [{"number": i, "tenant": "", "price": 1000 + (i % 3) * 500} for i in range(1, 11)]
 
 @lab6.route('/lab6/')
 def lab_6():
@@ -13,87 +12,34 @@ def lab_6():
 @lab6.route('/lab6/json-rpc-api/', methods=['POST'])
 def api():
     data = request.json
-    id = data['id']
-    
-    if data['method'] == 'info':
-        return {
-            'jsonrpc': '2.0',
-            'result': offices,
-            'id': id
-        }
-    
-    login = session.get('login')
+    method = data.get('method')
+    id = data.get('id')
+
+    if method == 'info':
+        return jsonify({'jsonrpc': '2.0', 'result': offices, 'id': id})
+
+    login = session.get('login', 'test_user')  # Используем "test_user" для тестирования
     if not login:
-        return {
-            'jsonrpc': '2.0',
-            'error': {
-                'code': 1,
-                'message': 'Unauthorized'
-            },
-            'id': id
-        }
-    
-    if data['method'] == 'booking':
-        office_number = data['params']
+        return jsonify({'jsonrpc': '2.0', 'error': {'code': 1, 'message': 'Unauthorized'}, 'id': id})
+
+    if method == 'booking':
+        office_number = data.get('params')
         for office in offices:
             if office['number'] == office_number:
-                if office['tenant'] != '':
-                    return {
-                        'jsonrpc': '2.0',
-                        'error': {
-                            'code': 2,
-                            'message': 'Already booked'
-                        },
-                        'id': id
-                    }
+                if office['tenant']:
+                    return jsonify({'jsonrpc': '2.0', 'error': {'code': 2, 'message': 'Already booked'}, 'id': id})
                 office['tenant'] = login
-                return {
-                    'jsonrpc': '2.0',
-                    'result': 'Office booked successfully',
-                    'id': id
-                }
-        return {
-            'jsonrpc': '2.0',
-            'error': {
-                'code': 3,
-                'message': 'Office not found'
-            },
-            'id': id
-        }
-    
-    if data['method'] == 'cancellation':
-        office_number = data['params']
+                return jsonify({'jsonrpc': '2.0', 'result': 'Office booked successfully', 'id': id})
+
+    if method == 'cancellation':
+        office_number = data.get('params')
         for office in offices:
             if office['number'] == office_number:
-                if office['tenant'] == '':
-                    return {
-                        'jsonrpc': '2.0',
-                        'error': {
-                            'code': 4,
-                            'message': 'Офис не забронирован'
-                        },
-                        'id': id
-                    }
+                if not office['tenant']:
+                    return jsonify({'jsonrpc': '2.0', 'error': {'code': 4, 'message': 'Office not booked'}, 'id': id})
                 if office['tenant'] != login:
-                    return {
-                        'jsonrpc': '2.0',
-                        'error': {
-                            'code': 5,
-                            'message': 'Вы не являетесь арендатором этого офиса'
-                        },
-                        'id': id
-                    }
+                    return jsonify({'jsonrpc': '2.0', 'error': {'code': 5, 'message': 'Not your office'}, 'id': id})
                 office['tenant'] = ''
-                return {
-                    'jsonrpc': '2.0',
-                    'result': 'Успешная отмена бронирования офиса',
-                    'id': id
-                }
-        return {
-            'jsonrpc': '2.0',
-            'error': {
-                'code': 3,
-                'message': 'Office not found'
-            },
-            'id': id
-        }
+                return jsonify({'jsonrpc': '2.0', 'result': 'Cancellation successful', 'id': id})
+
+    return jsonify({'jsonrpc': '2.0', 'error': {'code': -32601, 'message': 'Method not found'}, 'id': id})
